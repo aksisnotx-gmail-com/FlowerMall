@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysProductInfoMapper">
+    
+    <resultMap type="SysProductInfo" id="SysProductInfoResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="material"    column="material"    />
+        <result property="packageInfo"    column="package_info"    />
+        <result property="flowerLanguage"    column="flower_language"    />
+        <result property="bundled"    column="bundled"    />
+        <result property="delivery"    column="delivery"    />
+        <result property="description"    column="description"    />
+        <result property="productNum"    column="product_num"    />
+        <result property="tagUrl"    column="tag_url"    />
+        <result property="url"    column="url"    />
+        <result property="materialType"    column="material_type"    />
+        <result property="useType"    column="use_type"    />
+        <result property="useToType"    column="use_to_type"    />
+        <result property="priceType"    column="price_type"    />
+        <result property="type"    column="type"    />
+        <result property="status"    column="status"    />
+        <result property="price"    column="price"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysProductInfoVo">
+        select id, name, material, package_info, flower_language, bundled, delivery,material_type,use_type,use_to_type,price_type,type,price, description, product_num, tag_url, url, status, create_by, create_time, update_by, update_time from sys_product_info
+    </sql>
+
+    <select id="selectSysProductInfoList" parameterType="SysProductInfo" resultMap="SysProductInfoResult">
+        <include refid="selectSysProductInfoVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="material != null  and material != ''"> and material = #{material}</if>
+            <if test="packageInfo != null  and packageInfo != ''"> and package_info = #{packageInfo}</if>
+            <if test="flowerLanguage != null  and flowerLanguage != ''"> and flower_language = #{flowerLanguage}</if>
+            <if test="bundled != null  and bundled != ''"> and bundled = #{bundled}</if>
+            <if test="delivery != null  and delivery != ''"> and delivery = #{delivery}</if>
+            <if test="materialType != null  and materialType != ''"> and material_type = #{materialType}</if>
+            <if test="useType != null  and useType != ''"> and use_type = #{useType}</if>
+            <if test="priceType != null  and priceType != ''"> and price_type = #{priceType}</if>
+            <if test="useToType != null  and useToType != ''"> and use_to_type = #{useToType}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="productNum != null "> and product_num = #{productNum}</if>
+            <if test="tagUrl != null  and tagUrl != ''"> and tag_url = #{tagUrl}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysProductInfoById" parameterType="String" resultMap="SysProductInfoResult">
+        <include refid="selectSysProductInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysProductInfo" parameterType="SysProductInfo">
+        insert into sys_product_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="material != null">material,</if>
+            <if test="packageInfo != null">package_info,</if>
+            <if test="flowerLanguage != null">flower_language,</if>
+            <if test="bundled != null">bundled,</if>
+            <if test="delivery != null">delivery,</if>
+            <if test="useToType != null">use_to_type,</if>
+            <if test="materialType != null">material_type,</if>
+            <if test="useType != null">use_type,</if>
+            <if test="priceType != null">price_type,</if>
+            <if test="description != null">description,</if>
+            <if test="productNum != null">product_num,</if>
+            <if test="tagUrl != null">tag_url,</if>
+            <if test="url != null">url,</if>
+            <if test="status != null">status,</if>
+            <if test="type != null">type,</if>
+            <if test="price != null">price,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="material != null">#{material},</if>
+            <if test="packageInfo != null">#{packageInfo},</if>
+            <if test="flowerLanguage != null">#{flowerLanguage},</if>
+            <if test="bundled != null">#{bundled},</if>
+            <if test="delivery != null">#{delivery},</if>
+            <if test="useToType != null">#{useToType},</if>
+            <if test="materialType != null">#{materialType},</if>
+            <if test="useType != null">#{useType},</if>
+            <if test="priceType != null">#{priceType},</if>
+            <if test="description != null">#{description},</if>
+            <if test="productNum != null">#{productNum},</if>
+            <if test="tagUrl != null">#{tagUrl},</if>
+            <if test="url != null">#{url},</if>
+            <if test="status != null">#{status},</if>
+            <if test="type != null">#{type},</if>
+            <if test="price != null">#{price},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysProductInfo" parameterType="SysProductInfo">
+        update sys_product_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="material != null">material = #{material},</if>
+            <if test="packageInfo != null">package_info = #{packageInfo},</if>
+            <if test="flowerLanguage != null">flower_language = #{flowerLanguage},</if>
+            <if test="bundled != null">bundled = #{bundled},</if>
+            <if test="delivery != null">delivery = #{delivery},</if>
+            <if test="useToType != null">use_to_type = #{useToType},</if>
+            <if test="materialType != null">material_type = #{materialType},</if>
+            <if test="useType != null">use_type = #{useType},</if>
+            <if test="priceType != null">price_type = #{priceType},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="productNum != null">product_num = #{productNum},</if>
+            <if test="tagUrl != null">tag_url = #{tagUrl},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysProductInfoById" parameterType="String">
+        delete from sys_product_info where id = #{id}
+    </delete>
+
+    <delete id="deleteSysProductInfoByIds" parameterType="String">
+        delete from sys_product_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

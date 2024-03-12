@@ -1,0 +1,410 @@
+{
+    "pages" : [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "繁花花卉",
+				 "navigationStyle" : "custom"
+			}
+		},
+		{
+			"path": "pages/product/product",
+			"style": {
+				"navigationBarTitleText": "详情展示",
+				"navigationStyle" : "custom"
+			}
+		},
+        {
+            "path" : "pages/public/login",
+            "style" : {
+                "navigationBarTitleText" : "登录",
+                "navigationStyle" : "custom"
+            }
+        },
+        {
+            "path" : "pages/public/product/index",
+            "style" : {
+                "navigationBarTitleText" : "商品",
+                "navigationStyle" : "custom",
+                "onReachBottomDistance" : 100
+            }
+        },
+        {
+            "path" : "pages/public/product/productViewDetail",
+            "style" : {
+                "navigationBarTitleText" : "商品详情"
+            }
+        },
+        {
+            "path" : "pages/public/product/productList",
+            "style" : {
+                "navigationBarTitleText" : "我的商品"
+            }
+        },
+        {
+            "path" : "pages/public/request/index",
+            "style" : {
+                "navigationBarTitleText" : "需求",
+                "navigationStyle" : "custom",
+                "onReachBottomDistance" : 200
+            }
+        },
+        {
+            "path" : "pages/public/request/requestInfoDetail",
+			"style" : {
+			    "navigationBarTitleText" : "需求详情"
+			}
+        },
+		{
+		    "path" : "pages/public/request/requestInfoDetail_process",
+			"style" : {
+			    "navigationBarTitleText" : "需求详情"
+			}
+		},
+        {
+            "path" : "pages/public/response/addResponse",
+            "style" : {
+                "navigationBarTitleText" : "回复需求"
+            }
+        },
+        {
+            "path" : "pages/public/response/responseViewDetail",
+            "style" : {
+                "navigationBarTitleText" : "回复详情"
+            }
+        },
+		{
+		    "path" : "pages/public/response/previewResponse",
+		    "style" : {
+		        "navigationBarTitleText" : "预览"
+		    }
+		},
+        {
+            "path" : "pages/public/process/index",
+            "style" : {
+                "navigationBarTitleText" : "流程",
+                "navigationStyle" : "custom",
+                "onReachBottomDistance" : 100
+            }
+        },
+        {
+            "path" : "pages/public/process/processView",
+            "style" : {
+                "navigationBarTitleText" : "流程详情"
+            }
+        },
+		{
+		    "path" : "pages/public/process/processView_request",
+		    "style" : {
+		        "navigationBarTitleText" : "流程详情"
+		    }
+		},
+        {
+            "path" : "pages/public/process/processViewDetail",
+            "style" : {
+                "navigationBarTitleText" : "流程详情"
+            }
+        },
+        {
+            "path" : "pages/public/merchant/index",
+            "style" : {
+                "navigationBarTitleText" : "商户",
+                "navigationStyle" : "custom",
+                "onReachBottomDistance" : 100
+            }
+        },
+        {
+            "path" : "pages/public/merchant/merchantViewDetail",
+            "style" : {
+                "navigationBarTitleText" : "商户详情"
+            }
+        },
+        {
+            "path" : "pages/merchant/merchantView",
+            "style" : {
+                "navigationBarTitleText" : "商户详情"
+            }
+        },
+        {
+            "path" : "pages/merchant/merchantViewOnly",
+            "style" : {
+                "navigationBarTitleText" : "商户详情"
+            }
+        },
+        {
+            "path" : "pages/merchant/merchantList",
+            "style" : {
+                "navigationBarTitleText" : "商户列表"
+            }
+        },
+		{
+		    "path" : "pages/merchant/productList",
+		    "style" : {
+		        "navigationBarTitleText" : "商品列表"
+		    }
+		},
+        {
+            "path" : "pages/product/productList",
+            "style" : {
+                "navigationBarTitleText" : "我的商品"
+            }
+        },
+        {
+            "path" : "pages/product/productViewDetail",
+            "style" : {
+                "navigationBarTitleText" : "商品详情"
+            }
+        },
+        {
+            "path" : "pages/product/productUpdateDetail",
+            "style" : {
+                "navigationBarTitleText" : "商品详情"
+            }
+        },
+		{
+		    "path" : "pages/request/requestList",
+		    "style" : {
+		        "navigationBarTitleText" : "我发布的需求",
+		        "onReachBottomDistance" : 100
+		    }
+		},
+		{
+		    "path" : "pages/request/requestUpdateDetail",
+		    "style" : {
+		        "navigationBarTitleText" : "需求详情"
+		    }
+		},
+		{
+		    "path" : "pages/request/requestViewDetail",
+		    "style" : {
+		        "navigationBarTitleText" : "需求详情"
+		    }
+		},
+		{
+		    "path" : "pages/request/requestViewDetail_user",
+		    "style" : {
+		        "navigationBarTitleText" : "需求详情"
+		    }
+		},
+		{
+		    "path" : "pages/process/processExplan",
+		    "style" : {
+		        "navigationBarTitleText" : "流程创建说明"
+		    }
+		},
+		{
+		    "path" : "pages/process/processList",
+		    "style" : {
+		        "navigationBarTitleText" : "流程列表"
+		    }
+		},
+		{
+		    "path" : "pages/process/processList_user",
+		    "style" : {
+		        "navigationBarTitleText" : "流程列表"
+		    }
+		},
+		{
+		    "path" : "pages/process/processView",
+		    "style" : {
+		        "navigationBarTitleText" : "流程详情"
+		    }
+		},
+		{
+		    "path" : "pages/process/processView_user",
+		    "style" : {
+		        "navigationBarTitleText" : "流程详情"
+		    }
+		},
+		{
+		    "path" : "pages/process/processViewDetail",
+		    "style" : {
+		        "navigationBarTitleText" : "流程详情"
+		    }
+		},
+		{
+		    "path" : "pages/process/processUpdate",
+		    "style" : {
+		        "navigationBarTitleText" : "流程修改"
+		    }
+		},
+		{
+		    "path" : "pages/process/processUpdateDetail",
+		    "style" : {
+		        "navigationBarTitleText" : "流程详情修改"
+		    }
+		},
+		{
+		    "path" : "pages/process/requestList",
+		    "style" : {
+		        "navigationBarTitleText" : "任务列表"
+		    }
+		},
+		{
+		    "path" : "pages/response/responseList",
+		    "style" : {
+		        "navigationBarTitleText" : "回复列表"
+		    }
+		},
+		{
+		    "path" : "pages/response/productList",
+		    "style" : {
+		        "navigationBarTitleText" : "商品列表"
+		    }
+		},
+		{
+		    "path" : "pages/response/responseUpdateDetail",
+		    "style" : {
+		        "navigationBarTitleText" : "修改回复"
+		    }
+		},
+		{
+		    "path" : "pages/response/responseViewOnly",
+		    "style" : {
+		        "navigationBarTitleText" : "回复详情"
+		    }
+		},
+		{
+		    "path" : "pages/response/responseViewDetail",
+		    "style" : {
+		        "navigationBarTitleText" : "查看回复"
+		    }
+		},
+		{
+		    "path" : "pages/response/responseViewDetail_user",
+		    "style" : {
+		        "navigationBarTitleText" : "查看回复"
+		    }
+		},
+		{
+		    "path" : "pages/user/mine",
+		    "style" : {
+		        "navigationBarTitleText" : "我的",
+		        "navigationStyle" : "custom",
+		        "onReachBottomDistance" : 100
+		    }
+		},
+		{
+		    "path" : "pages/mine/about/index",
+		    "style" : {
+		        "navigationBarTitleText" : "关于我们"
+		    }
+		},
+		{
+		    "path" : "pages/set/set",
+		    "style" : {
+		        "navigationBarTitleText" : "设置"
+		    }
+		},
+		{
+		    "path" : "pages/set/userinfo",
+		    "style" : {
+		        "navigationBarTitleText" : "个人资料"
+		    }
+		},
+		{
+		    "path" : "pages/shareInfo/index",
+		    "style" : {
+		        "navigationBarTitleText" : "分享列表"
+		    }
+		},
+		{
+		    "path" : "pages/shareInfo/shareRequestList",
+		    "style" : {
+		        "navigationBarTitleText" : "需求"
+		    }
+		},
+		{
+		    "path" : "pages/shareInfo/shareRequestViewDetail",
+		    "style" : {
+		        "navigationBarTitleText" : "详情"
+		    }
+		},
+		{
+		    "path" : "pages/agree/index",
+		    "style" : {
+		        "navigationBarTitleText" : "点赞列表"
+		    }
+		},
+		{
+		    "path" : "pages/agree/agreeResponseList",
+		    "style" : {
+		        "navigationBarTitleText" : "回复"
+		    }
+		},
+		{
+		    "path" : "pages/agree/agreeResponseViewDetail",
+		    "style" : {
+		        "navigationBarTitleText" : "回复详情"
+		    }
+		},
+		{
+		    "path" : "pages/public/share/request/requestInfoPage",
+			"style" : {
+			    "navigationBarTitleText" : "旭侠客"
+			}
+		},
+		{
+		    "path" : "pages/public/share/response/responseViewDetail",
+			"style" : {
+			    "navigationBarTitleText" : "旭侠客"
+			}
+		},
+		{
+		    "path" : "pages/public/share/process/processView",
+			"style" : {
+			    "navigationBarTitleText" : "旭侠客"
+			}
+		},
+		{
+		    "path" : "pages/public/share/response/addResponse",
+			"style" : {
+			    "navigationBarTitleText" : "旭侠客"
+			}
+		},
+		{
+		    "path" : "pages/public/share/request/requestInfoDetail",
+			"style" : {
+			    "navigationBarTitleText" : "旭侠客"
+			}
+		},
+		{
+		    "path" : "pages/public/share/response/previewResponse",
+			"style" : {
+			    "navigationBarTitleText" : "旭侠客"
+			}
+		}
+    ],
+    "tabBar" : {
+        "color" : "#000000",
+        "selectedColor" : "#ff007f",
+        "borderStyle" : "white",
+        "backgroundColor" : "#a6e7f1",
+        "list" : [
+            // {
+            //     "pagePath" : "pages/public/product/index",
+            //     "text" : "商品"
+            // },
+            {
+                "pagePath" : "pages/public/request/index",
+                "text" : "需求"
+            },
+            {
+                "pagePath" : "pages/public/process/index",
+                "text" : "流程"
+            },
+            // {
+            //     "pagePath" : "pages/public/merchant/index",
+            //     "text" : "商户"
+            // },
+			{
+			    "pagePath" : "pages/user/mine",
+			    "text" : "我的"
+			}
+        ]
+    },
+    "globalStyle" : {
+        "navigationBarTextStyle" : "white",
+        "navigationBarBackgroundColor" : "#a6e7f1"
+    }
+}
