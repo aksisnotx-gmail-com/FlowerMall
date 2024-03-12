@@ -1,8 +1,12 @@
-package com.ruoyi.framework.config;
+package com.ruoyi.web.core.config;
 
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import org.apache.ibatis.io.VFS;
+import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +24,7 @@ import org.springframework.util.ClassUtils;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Mybatis支持*匹配扫描包
@@ -31,12 +32,13 @@ import java.util.List;
  * @author ruoyi
  */
 @Configuration
-public class MyBatisConfig
+public class MyBatisConfig implements MetaObjectHandler
 {
     @Autowired
     private Environment env;
 
     static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
+
 
     public static String setTypeAliasesPackage(String typeAliasesPackage)
     {
@@ -125,11 +127,26 @@ public class MyBatisConfig
 
         //final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         MybatisSqlSessionFactoryBean sessionFactory = new MybatisSqlSessionFactoryBean();
-
+//下面三句，把刚刚写的handler，放在sessionFactory中
+        GlobalConfig globalConfig = new GlobalConfig();
+        globalConfig.setMetaObjectHandler(this);
+        sessionFactory.setGlobalConfig(globalConfig);
         sessionFactory.setDataSource(dataSource);
         sessionFactory.setTypeAliasesPackage(typeAliasesPackage);
         sessionFactory.setMapperLocations(resolveMapperLocations(StringUtils.split(mapperLocations, ",")));
         sessionFactory.setConfigLocation(new DefaultResourceLoader().getResource(configLocation));
         return sessionFactory.getObject();
+    }
+
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        metaObject.setValue("createTime",new Date());
+        metaObject.setValue("createUser", SecurityUtils.getLoginUser().getUser().getStrUserId());
+    }
+
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        metaObject.setValue("updateTime",new Date());
+        metaObject.setValue("updateUser",SecurityUtils.getLoginUser().getUser().getStrUserId());
     }
 }
