@@ -1,0 +1,4 @@
+file:
+  save:
+    #为了兼容不互相依赖的问题把地址放在这里
+    path: D:/ruoyi/uploadPath/videoPictures/

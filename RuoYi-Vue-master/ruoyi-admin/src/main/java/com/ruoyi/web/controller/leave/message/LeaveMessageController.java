@@ -1,8 +1,12 @@
 package com.ruoyi.web.controller.leave.message;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.utils.CommonPageRequestUtils;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.domain.FlowerTutorial;
 import com.ruoyi.system.domain.LeaveMessage;
 import com.ruoyi.system.domain.common.Entity;
 import com.ruoyi.system.service.impl.LeaveMessageServiceImpl;
@@ -37,15 +41,16 @@ public class LeaveMessageController {
     }
 
     @GetMapping("getMessage")
-    @ApiOperation("获取自己留言")
-    public R<List<LeaveMessage>> get() {
-        return R.ok(messageService.getMessage(SecurityUtils.getLoginUser().getUser().getStrUserId()));
+    @ApiOperation("分页获取自己留言")
+    public R<Page<LeaveMessage>> get() {
+        LambdaQueryWrapper<LeaveMessage> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(LeaveMessage::getUserId, SecurityUtils.getLoginUser().getUser().getStrUserId());
+        return R.ok(messageService.page(CommonPageRequestUtils.defaultPage(), wrapper));
     }
-
     @GetMapping("getAllMessage")
-    @ApiOperation("获取所有的留言")
-    public R<List<LeaveMessage>> getAll() {
-        return R.ok(messageService.getAllMessage());
+    @ApiOperation("分页获取所有的留言")
+    public R<Page<LeaveMessage>> getAll() {
+        return R.ok(messageService.page(CommonPageRequestUtils.defaultPage()));
     }
 
     @GetMapping("delete/{messageId}")
