@@ -42,7 +42,7 @@ public class FIleServiceImpl extends ServiceImpl<FileMapper, File> {
             fileName = file.getOriginalFilename();
 
             //检查文件格式格式
-            check(fileName,JPEG,FLAC,PNG,GIF,MP4,AVI,FLV,MKV,MOV,WMV,WEBM);
+            check(fileName,MP4);
 
             String path = String.format("%s%s", filePath,fileName);
             downloadPath = FileUtils.upload(file.getInputStream(),path);

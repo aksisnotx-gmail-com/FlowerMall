@@ -70,6 +70,6 @@ public class FlowerTutorialController {
     @ApiOperation("分页获取所有教程")
     @PreAuthorize("@ss.hasRole('admin')")
     public R<Page<FlowerTutorial>> getAll() {
-        return R.ok(this.flowerTutorialService.pageAll(CommonPageRequestUtils.defaultPage()));
+        return R.ok(this.flowerTutorialService.pageAll());
     }
 }

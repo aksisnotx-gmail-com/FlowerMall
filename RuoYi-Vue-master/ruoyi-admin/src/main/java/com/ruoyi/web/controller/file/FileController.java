@@ -27,7 +27,7 @@ public class FileController {
     private final FIleServiceImpl fileService;
 
     @PostMapping("upload")
-    @ApiOperation("上传文件支持JPEG,FLAC,PNG,GIF,MP4,AVI,FLV,MKV,MOV,WMV,WEBM")
+    @ApiOperation("上传文件支持MP4")
     public R<String> upload(@RequestBody MultipartFile file) {
         return R.ok(fileService.saveFile(file));
     }

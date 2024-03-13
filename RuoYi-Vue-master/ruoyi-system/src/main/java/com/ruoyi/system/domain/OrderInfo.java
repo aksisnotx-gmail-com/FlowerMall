@@ -3,14 +3,11 @@ package com.ruoyi.system.domain;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.ruoyi.system.domain.common.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 留言表
@@ -18,9 +15,9 @@ import java.util.List;
  * @TableName sys_leave_message
  */
 @EqualsAndHashCode(callSuper = true)
-@TableName(value ="sys_flowers_tutorial")
+@TableName(value ="sys_file")
 @Data
-public class FlowerTutorial extends Entity implements Serializable {
+public class OrderInfo extends Entity implements Serializable {
     /**
      * ID
      */
@@ -28,25 +25,12 @@ public class FlowerTutorial extends Entity implements Serializable {
     private String id;
 
     /**
-     * 教程内容
-     */
-    private String textDesc;
-
-    /**
-     * 文件ID,如果有不为空,如果是多个文件用逗号隔开
-     */
-    private String fileId;
-
-    /**
-     * 用户ID
+     * 文件保存地址
      */
     private String userId;
 
-    /**
-     * 鲜花教程可能有个多个文件
-     */
     @TableField(exist = false)
-    private File file;
+    private String suffix;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

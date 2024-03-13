@@ -33,5 +33,5 @@ public class FlowerTutorialParam  implements Serializable {
      * 文件ID,如果有不为空,如果是多个文件用逗号隔开
      */
     @JsonView({Entity.INSERT.class, Entity.UPDATE.class})
-    private List<String> fileId;
+    private String fileId;
 }

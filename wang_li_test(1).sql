@@ -602,7 +602,6 @@ CREATE  TABLE if not exists `sys_leave_message`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '留言表' ROW_FORMAT = Dynamic;
 
 #鲜花教程
-use wang_li_test;
 CREATE  TABLE if not exists sys_flowers_tutorial  (
     id varchar(255) primary key  comment 'ID',
     `text_desc`  text  comment '教程内容',
@@ -623,3 +622,16 @@ CREATE  TABLE if not exists sys_file  (
         create_time  timestamp comment '创建时间',
         update_time  timestamp comment '更新时间'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件地址' ROW_FORMAT = Dynamic;
+
+
+#订单
+use wang_li_test;
+CREATE  TABLE if not exists sys_order_info  (
+        id varchar(255) primary key  comment 'ID',
+        user_id varchar(255)  comment '用户ID',
+        product_id varchar(255)  comment '产品ID',
+        create_user varchar(255)  comment '创建用户ID',
+        update_user varchar(255)  comment '更新用户ID',
+        create_time  timestamp comment '创建时间',
+        update_time  timestamp comment '更新时间'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单信息' ROW_FORMAT = Dynamic;

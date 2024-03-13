@@ -43,9 +43,7 @@ public class FlowerTutorialServiceImpl extends ServiceImpl<FlowerTutorialMapper,
     public Boolean saveTutorial(FlowerTutorialParam param, String strUserId) {
         FlowerTutorial flowerTutorial = new FlowerTutorial();
         BeanUtil.copyProperties(param,flowerTutorial);
-        String fileStr = listToString(param.getFileId());
         flowerTutorial.setUserId(strUserId);
-        flowerTutorial.setFileId(fileStr);
         return this.save(flowerTutorial);
     }
 
@@ -101,7 +99,7 @@ public class FlowerTutorialServiceImpl extends ServiceImpl<FlowerTutorialMapper,
         return getPage(wrapper);
     }
 
-    public Page<FlowerTutorial> pageAll(Page<Object> objectPage) {
+    public Page<FlowerTutorial> pageAll() {
         return getPage(null);
     }
 
@@ -112,20 +110,14 @@ public class FlowerTutorialServiceImpl extends ServiceImpl<FlowerTutorialMapper,
         }else {
             page = this.page(CommonPageRequestUtils.defaultPage());
         }
-        page.getRecords().stream().forEach(t -> {
-            ArrayList<File> files = new ArrayList<>();
-            Arrays.stream(t.getFileId().split(StrUtil.COMMA)).forEach(t1 -> {
-                if (StrUtil.isBlank(t1)) {
-                    return;
-                }
-                File file = fileService.getById(t1);
-                String path = file.getPath();
-                Assert.notNull(file,"ID为: "+t1+"文件不存在");
-                file.setPath(getUrl(request).concat(FILE_LINK).concat(file.getId()));
-                file.setSuffix(FileUtils.getFileSuffix(path));
-                files.add(file);
-            });
-            t.setFile(files);
+
+        page.getRecords().forEach(t -> {
+            File file = fileService.getById(t.getFileId());
+            String path = file.getPath();
+            Assert.notNull(file,"ID为: "+t.getFileId()+"文件不存在");
+            file.setPath(getUrl(request).concat(FILE_LINK).concat(file.getId()));
+            file.setSuffix(FileUtils.getFileSuffix(path));
+            t.setFile(file);
         });
         return page;
     }
