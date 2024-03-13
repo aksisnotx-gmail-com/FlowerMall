@@ -45,7 +45,7 @@ public class Order extends Entity implements Serializable {
     /**
      * 订单总价
      */
-    private Boolean lumpSum;
+    private Double lumpSum;
 
     /**
      * 商品ID

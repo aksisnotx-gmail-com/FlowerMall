@@ -38,7 +38,7 @@ public class OrderParam implements Serializable {
      * 订单总价
      */
     @JsonView({Entity.INSERT.class})
-    private Boolean lumpSum;
+    private Double lumpSum;
 
     /**
      * 商品ID
