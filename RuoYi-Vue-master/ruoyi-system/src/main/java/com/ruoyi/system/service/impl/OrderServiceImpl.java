@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.entity.SysProductInfo;
 import com.ruoyi.common.exception.GlobalException;
 import com.ruoyi.common.utils.CommonPageRequestUtils;
@@ -43,35 +44,39 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> {
     public Boolean continuePay(OrderParam order, String userId) {
         Order orderEntity = checkUser(check(order.getId()), userId);
         orderEntity.setDeliveryAddress(order.getDeliveryAddress());
+        Assert.isTrue(orderEntity.getOrderState().equals(OrderState.WAITING),"当前状态不允许付款");
         orderEntity.setOrderState(OrderState.PAID);
         return this.updateById(orderEntity);
     }
 
     public Boolean cancel(String orderId, String userId) {
         Order orderEntity = checkUser(check(orderId), userId);
-        if (OrderState.PAID.equals(orderEntity.getOrderState())) {
+        if (!OrderState.PAID.equals(orderEntity.getOrderState())) {
             throw new GlobalException("只有未付款的订单才能取消");
         }
         orderEntity.setOrderState(OrderState.CANCELLED);
         return this.updateById(orderEntity);
     }
 
-    public Page<Order> getOrders(String userId) {
+    public CommonPageRequestUtils.PageVO<Order> getOrders(String userId) {
         LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Order::getUserId, userId);
         return getPage(wrapper);
     }
 
-    public Page<Order> getAllOrders() {
+    public CommonPageRequestUtils.PageVO<Order> getAllOrders() {
         return getPage(null);
     }
 
     public Boolean adminDeleteOrder(String orderId) {
+        Order check = check(orderId);
+        Assert.isTrue(!OrderState.WAITING.equals(check.getOrderState()),"当前订单状态不允许删除");
         return this.removeById(orderId);
     }
 
     public Boolean deleteOrder(String orderId, String userId) {
-        checkUser(check(orderId), userId);
+        Order order = checkUser(check(orderId), userId);
+        Assert.isTrue(!OrderState.WAITING.equals(order.getOrderState()),"当前订单状态不允许删除");
         return this.removeById(orderId);
     }
 
@@ -86,12 +91,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> {
         return order;
     }
 
-    private Page<Order> getPage(LambdaQueryWrapper<Order> wrapper) {
-        Page<Order> page;
+    private CommonPageRequestUtils.PageVO<Order> getPage(LambdaQueryWrapper<Order> wrapper) {
+        CommonPageRequestUtils.PageVO<Order> page;
         if (!Objects.isNull(wrapper)) {
-            page = this.page(CommonPageRequestUtils.defaultPage(), wrapper);
+            page = CommonPageRequestUtils.getPageVO(this, wrapper);
         }else {
-            page = this.page(CommonPageRequestUtils.defaultPage());
+            page = CommonPageRequestUtils.getPageVO(this, null);
         }
 
         page.getRecords().forEach(t -> {
@@ -108,4 +113,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> {
         byId.setProducts(products);
         return byId;
     }
+
+
 }

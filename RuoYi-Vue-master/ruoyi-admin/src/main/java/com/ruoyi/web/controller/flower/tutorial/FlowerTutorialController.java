@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.flower.tutorial;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.utils.CommonPageRequestUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.system.domain.FlowerTutorial;
 import com.ruoyi.system.service.impl.FlowerTutorialServiceImpl;
@@ -57,14 +58,14 @@ public class FlowerTutorialController {
 
     @GetMapping("/get")
     @ApiOperation("分页获取个人教程")
-    public R<Page<FlowerTutorial>> get() {
+    public R<CommonPageRequestUtils.PageVO<FlowerTutorial>> get() {
         return R.ok(this.flowerTutorialService.pageOwner(SecurityUtils.getLoginUser().getUser().getStrUserId()));
     }
 
     @GetMapping("/getAll")
     @ApiOperation("分页获取所有教程")
     @PreAuthorize("@ss.hasRole('admin')")
-    public R<Page<FlowerTutorial>> getAll() {
+    public R<CommonPageRequestUtils.PageVO<FlowerTutorial>> getAll() {
         return R.ok(this.flowerTutorialService.pageAll());
     }
 }

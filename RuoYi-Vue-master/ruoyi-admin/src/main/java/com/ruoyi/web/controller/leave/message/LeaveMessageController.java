@@ -42,15 +42,15 @@ public class LeaveMessageController {
 
     @GetMapping("getMessage")
     @ApiOperation("分页获取自己留言")
-    public R<Page<LeaveMessage>> get() {
+    public R<CommonPageRequestUtils.PageVO<LeaveMessage>> get() {
         LambdaQueryWrapper<LeaveMessage> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(LeaveMessage::getUserId, SecurityUtils.getLoginUser().getUser().getStrUserId());
-        return R.ok(messageService.page(CommonPageRequestUtils.defaultPage(), wrapper));
+        return R.ok(CommonPageRequestUtils.getPageVO(messageService, wrapper));
     }
     @GetMapping("getAllMessage")
     @ApiOperation("分页获取所有的留言")
-    public R<Page<LeaveMessage>> getAll() {
-        return R.ok(messageService.page(CommonPageRequestUtils.defaultPage()));
+    public R<CommonPageRequestUtils.PageVO<LeaveMessage>> getAll() {
+        return R.ok(CommonPageRequestUtils.getPageVO(messageService, null));
     }
 
     @GetMapping("delete/{messageId}")

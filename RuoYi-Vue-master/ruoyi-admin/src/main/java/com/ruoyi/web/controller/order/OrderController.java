@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.order;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.utils.CommonPageRequestUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.system.domain.Order;
 import com.ruoyi.system.domain.common.Entity;
@@ -49,7 +50,7 @@ public class OrderController {
 
     @GetMapping("/get")
     @ApiOperation("获取个人所有订单")
-    public R<Page<Order>> get() {
+    public R<CommonPageRequestUtils.PageVO<Order>> get() {
         return R.ok(orderService.getOrders(SecurityUtils.getLoginUser().getUser().getStrUserId()));
     }
 
@@ -62,7 +63,7 @@ public class OrderController {
     @GetMapping("/admin/getAll")
     @ApiOperation("管理员获取所有订单")
     @PreAuthorize("@ss.hasRole('admin')")
-    public R<Page<Order>> getAll() {
+    public R<CommonPageRequestUtils.PageVO<Order>> getAll() {
         return R.ok(orderService.getAllOrders());
     }
 

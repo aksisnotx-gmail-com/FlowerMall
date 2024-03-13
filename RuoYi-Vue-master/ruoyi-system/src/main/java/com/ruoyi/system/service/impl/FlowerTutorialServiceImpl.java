@@ -94,23 +94,23 @@ public class FlowerTutorialServiceImpl extends ServiceImpl<FlowerTutorialMapper,
     }
 
 
-    public Page<FlowerTutorial> pageOwner(String strUserId) {
+    public CommonPageRequestUtils.PageVO<FlowerTutorial> pageOwner(String strUserId) {
         LambdaQueryWrapper<FlowerTutorial> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(FlowerTutorial::getUserId, strUserId);
         //转化
         return getPage(wrapper);
     }
 
-    public Page<FlowerTutorial> pageAll() {
+    public CommonPageRequestUtils.PageVO<FlowerTutorial> pageAll() {
         return getPage(null);
     }
 
-    private Page<FlowerTutorial> getPage(LambdaQueryWrapper<FlowerTutorial> wrapper) {
-        Page<FlowerTutorial> page;
+    private CommonPageRequestUtils.PageVO<FlowerTutorial> getPage(LambdaQueryWrapper<FlowerTutorial> wrapper) {
+        CommonPageRequestUtils.PageVO<FlowerTutorial> page;
         if (!Objects.isNull(wrapper)) {
-            page = this.page(CommonPageRequestUtils.defaultPage(), wrapper);
+            page = CommonPageRequestUtils.getPageVO(this,wrapper);
         }else {
-            page = this.page(CommonPageRequestUtils.defaultPage());
+            page = CommonPageRequestUtils.getPageVO(this, null);
         }
 
         page.getRecords().forEach(t -> {

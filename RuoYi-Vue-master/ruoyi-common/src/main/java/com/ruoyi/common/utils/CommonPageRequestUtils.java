@@ -2,9 +2,15 @@ package com.ruoyi.common.utils;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.exception.GlobalException;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -12,7 +18,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 分页参数获取器
@@ -55,7 +64,7 @@ public class CommonPageRequestUtils {
         String pageString = getParamFromRequest(PAGE_PARAM_NAME);
         if (ObjectUtil.isNotEmpty(pageString)) {
             try {
-                page = Convert.toInt(pageString);
+                page = Convert.toInt(pageString); ///order/admin/getAll?current=2
             } catch (Exception e) {
                 log.error(">>> 分页页数转换异常：", e);
                 page = 1;
@@ -132,5 +141,63 @@ public class CommonPageRequestUtils {
 
     public static boolean isWeb() {
         return RequestContextHolder.getRequestAttributes() != null;
+    }
+
+    /**
+     * 因为mybatis-plus的page不能使用于是封装一个自己的
+     */
+    public static <M extends BaseMapper<T>,T> PageVO<T> getPageVO(ServiceImpl<M,T> service, LambdaQueryWrapper<T> wrapper) {
+        Page<Object> page = defaultPage();
+        long  total, current = page.getCurrent(), size = page.getSize(),offset = (current - 1) * size;
+        List<T> records;
+        if (Objects.isNull(wrapper)) {
+            total = service.count();
+            LambdaQueryWrapper<T> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.last(String.format("LIMIT %d, %d",offset,size));
+            records = service.list(queryWrapper);
+        }else {
+            total = service.count(wrapper);
+            wrapper.last(String.format("LIMIT %d, %d",offset,size));
+            records = service.list(wrapper);
+        }
+        service.count();
+
+        return new PageVO<T>().
+                setTotal(total).
+                setCurrent(current).
+                setSize(size).
+                setRecords(records);
+    }
+
+    /**
+     * 分页工具类
+     * @author xxl
+     * @since 2023/6/10
+     */
+    @Data
+    @Accessors(chain = true)
+    public static class PageVO<T> implements Serializable {
+
+        private static final long serialVersionUID = 5633361189305883916L;
+
+        /**
+         * 页面数据
+         */
+        private List<T> records = Collections.emptyList();
+
+        /**
+         * 总数
+         */
+        private long  total = 0;
+
+        /**
+         * 当前
+         */
+        private long current = 1;
+
+        /**
+         * 每页显示多少
+         */
+        private long size = 10;
     }
 }
