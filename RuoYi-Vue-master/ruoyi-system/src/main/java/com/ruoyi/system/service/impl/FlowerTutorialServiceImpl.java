@@ -1,4 +1,4 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.file.FileUtils;
 import com.ruoyi.common.utils.CommonPageRequestUtils;
+import com.ruoyi.system.domain.File;
+import com.ruoyi.system.domain.FlowerTutorial;
 import com.ruoyi.system.domain.param.FlowerTutorialParam;
 import com.ruoyi.system.mapper.FlowerTutorialMapper;
 import com.ruoyi.system.service.impl.FIleServiceImpl;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FlowerTutorialServiceImpl extends ServiceImpl<FlowerTutorialMapper,FlowerTutorial> {
+public class FlowerTutorialServiceImpl extends ServiceImpl<FlowerTutorialMapper, FlowerTutorial> {
 
     private final FIleServiceImpl fileService;
 

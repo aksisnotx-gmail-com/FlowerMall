@@ -1,14 +1,11 @@
 package com.ruoyi.web.controller.flower.tutorial;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.ruoyi.common.core.domain.R;
-import com.ruoyi.common.utils.CommonPageRequestUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.system.domain.FlowerTutorial;
-import com.ruoyi.system.domain.FlowerTutorialServiceImpl;
-import com.ruoyi.system.domain.LeaveMessage;
+import com.ruoyi.system.service.impl.FlowerTutorialServiceImpl;
 import com.ruoyi.system.domain.common.Entity;
 import com.ruoyi.system.domain.param.FlowerTutorialParam;
 import io.swagger.annotations.Api;
@@ -17,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 鲜花教程接口

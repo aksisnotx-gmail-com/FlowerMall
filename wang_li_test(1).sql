@@ -624,14 +624,19 @@ CREATE  TABLE if not exists sys_file  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件地址' ROW_FORMAT = Dynamic;
 
 
-#订单
+#订单信息
 use wang_li_test;
-CREATE  TABLE if not exists sys_order_info  (
+CREATE  TABLE if not exists sys_order  (
         id varchar(255) primary key  comment 'ID',
         user_id varchar(255)  comment '用户ID',
-        product_id varchar(255)  comment '产品ID',
+        order_state varchar(255)  comment '状态ID',
+        delivery_address varchar(255)  comment '配送地址',
+        lump_sum   boolean  comment '总金额',
+        product_id  text  comment '产品信息 json',
         create_user varchar(255)  comment '创建用户ID',
         update_user varchar(255)  comment '更新用户ID',
         create_time  timestamp comment '创建时间',
         update_time  timestamp comment '更新时间'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
+
+
