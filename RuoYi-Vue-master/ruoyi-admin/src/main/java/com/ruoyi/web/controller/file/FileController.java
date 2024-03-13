@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.file;
 
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.system.domain.File;
 import com.ruoyi.system.service.impl.FIleServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +34,7 @@ public class FileController {
 
     @GetMapping("download/{fileId}")
     @ApiOperation("下载文件")
-    public void download(@PathVariable("fileId") String fileId) {
-        fileService.dowload(fileId);
+    public  R<File> download(@PathVariable("fileId") String fileId) {
+        return R.ok(fileService.getById(fileId));
     }
 }
