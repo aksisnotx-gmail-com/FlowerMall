@@ -35,7 +35,7 @@ public class OrderController {
         return R.ok(orderService.pay(order, SecurityUtils.getLoginUser().getUser().getStrUserId()));
     }
 
-    @PostMapping("/pay")
+    @PostMapping("/continue/pay")
     @ApiOperation("继续付款")
     public R<Boolean> continuePay(@RequestBody @JsonView(Entity.UPDATE.class) @Validated(Entity.UPDATE.class) OrderParam order) {
         return R.ok(orderService.continuePay(order, SecurityUtils.getLoginUser().getUser().getStrUserId()));
