@@ -4,7 +4,7 @@
 			<view style="display: flex;justify-content: center;align-items: center;padding: 20px;">
 				<text style="padding: 5px;font-size: 14px;" @click="login" v-if="hasLogin == '0'">登录</text>
 				<text style="padding: 5px;font-size: 14px;" @click="regist" v-if="hasLogin == '0'">注册</text>
-				<text style="padding: 5px;font-size: 14px;" v-if="hasLogin == '1'">欢迎： {{user.nickName}}</text>
+				<text style="padding: 5px;font-size: 14px;" @click="goMyCenter" v-if="hasLogin == '1'">欢迎： {{getUserInfo().nickName}}</text>
 				<text style="padding: 10px;font-size: 14px;">|</text>
 				
 				<view style="display: flex;align-items: center;" @click="openGoodCar">
@@ -110,7 +110,7 @@
 					</uni-tr>
 				</uni-table>
 				<view class="s-header">
-					<button type="primary" style="background:darkgrey;width: 20%;" @click="cancel">返回</button>
+					<button type="primary" style="background:darkgrey;width: 20%;" @click="goToHome">返回</button>
 					<button type="primary" style="background: hotpink;width: 20%" @click="goToGoodCar">结算</button>
 				</view>
 			</view>
@@ -124,12 +124,28 @@
 					<view class="c-row">
 						<text>总价：￥{{totalPrice}}</text>
 					</view>
-						<image src="../../static/temp/erweima.png"></image>
+						<!-- <image src="../../static/temp/erweima.png"></image> -->
 					<view class="c-row">
 						<button type="primary" class=" action-btn no-border" @click="cancel">返回</button>
+						<button type="warn" class=" action-btn no-border" @click="">确认支付</button>
 					</view>
 				</view>
 			</view>
+		</view>
+		<view v-else-if="showType == '5'">
+			<view class="user_info" v-if="user.nickName">
+				<image :src="'http://localhost:8080' + user.avatar" mode="aspectFit"></image>
+				<text>昵称: {{user.nickName}}</text>
+				<text>用户名: {{user.userName}}</text>
+				<text>邮箱: {{user.email}}</text>
+				<text>联系方式: {{user.phonenumber}}</text>
+				<text>性别: {{mapSex(user.sex)}}</text>
+				<text>上次登录时间: {{convertDateTimeFormat(user.loginDate)}}</text>
+			</view>
+			<view v-else>
+				<h2>暂未登录</h2>
+			</view>
+			<button type="warn" class=" action-btn no-border" @click="goToHome">返回</button>
 		</view>
 		<view v-else>
 			<view v-if="type == '0'">
@@ -252,7 +268,16 @@
 					</scroll-view>
 				</view>
 			</view>
-			<view v-else>
+			<view v-if="type == '4'">
+				<tutorial></tutorial>
+			</view>
+			<view v-if="type == '5'">
+				<leavemsg></leavemsg>
+			</view>
+			<view v-if="type == '6'">
+				<order></order>
+			</view>
+			<view v-if="[1, 2, 3].includes(type)">
 				<view class="c-list" style="margin: 5%;background: white;" v-if="type == '1'">
 					<view class="c-row">
 						<text class="tit">已选条件</text>
@@ -312,8 +337,8 @@
 					</view>
 				</view>
 			</view>
+			
 		</view>
-		
 		<view class="c-list">
 			<view class="c-row" style="display: flex;background: #f7c0ba;">
 				<view class="buttom-item">
@@ -341,6 +366,10 @@
 	import uniDataCheckbox from '@/components/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox.vue'
 	import {registUser} from "@/api/system/user.js"
 	import {login,getInfo} from "@/api/login.js"
+	import leavemsg from '@/pages/leavemsg/index.vue'
+	import order from '@/pages/order/index'
+	import tutorial from '@/pages/tutorial/index.vue'
+	import { setToken } from '@/utils/auth.js'
 	
 	import {getProductInfoList,getProductList,getProductType} from "@/api/index/index.js"
 	
@@ -349,7 +378,10 @@
 	
 	export default {
 		components: {
-			uniDataCheckbox
+			uniDataCheckbox,
+			leavemsg,
+			order,
+			tutorial
 		},
 		data() {
 			
@@ -357,9 +389,9 @@
 				user:{
 					username:"",
 					nickname:"",
-					email:"",
-					phonenumber:"",
-					sex:"",
+					email:"1",
+					phonenumber:"1",
+					sex:"1",
 					password:"",
 					password1:""
 				},
@@ -395,11 +427,11 @@
 					},
 					{
 						id: 5,
-						name: '线上预约diy'
+						name: '留言板'
 					},
 					{
 						id: 6,
-						name: '留言板'
+						name: '订单'
 					}
 				],
 				type:0,
@@ -536,13 +568,55 @@
 		onLoad() {
 			this.loadData();
 		},
+		onShow () {
+			const userInfo = uni.getStorageSync('user')
+			if(!userInfo.nickName) {
+				this.hasLogin = 0
+			}
+			
+			this.hasLogin = 1
+		},
 		methods: {
+			mapSex(num) {
+				const obj = {
+					1: '女',
+					2: '男'
+				}
+				
+				if(!obj[num]) return
+				
+				return obj[num]
+			},
+			convertDateTimeFormat(dateTimeStr) {
+			  // 解析ISO格式的时间字符串
+			  const date = new Date(dateTimeStr);
+			  // 使用Intl.DateTimeFormat来格式化日期
+			  const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+			  const formatter = new Intl.DateTimeFormat('en-GB', options);
+			
+			  // 格式化日期，然后替换日期中的"/"为"-"，以匹配所需的格式
+			  const formattedDate = formatter.format(date).replace(/\//g, '-');
+			  
+			  // 将格式化的日期分割并重组，以满足"YYYY-MM-DD hh:mm:ss"的格式要求
+			  const [dd, mm, yyyy, hh, ii, ss] = formattedDate.match(/\d+/g);
+			  return `${yyyy}-${mm}-${dd} ${hh}:${ii}:${ss}`;
+			},
 			goToGoodCar(){
+				if(!this.goodList.length) {
+					uni.showToast({
+						title: '请选择商品',
+						icon: 'error',
+						duration: 2000
+					});
+					return;
+				}
+				
 				this.showType = "3";
 				this.goodListTmp = this.goodList;
 				for(let item of this.goodListTmp){
 					this.totalPrice = item.price * item.number + this.totalPrice;
 				}
+
 			},
 			removeGood(item){
 				let that = this;
@@ -565,7 +639,6 @@
 			openGoodCar(){
 				this.goodList =  uni.getStorageSync(goodListKey);
 				this.showType = '2'
-				console.log(this.goodList)
 			},
 			logout(){
 				let that = this;
@@ -583,6 +656,7 @@
 								password1:""};
 							that.showType = '2';
 							that.hasLogin = '0';
+							uni.removeStorageSync('user')
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -591,7 +665,8 @@
 			},
 			cancel(){
 				this.showType = '4';
-				this.user = {username:"",
+				this.user = {
+					username:"",
 					nickname:"",
 					email:"",
 					phonenumber:"",
@@ -599,6 +674,9 @@
 					password:"",
 					password1:""};
 					console.log(this.user)
+			},
+			goToHome () {
+				this.showType = '4';
 			},
 			regist(){
 				this.showType = '0'
@@ -611,7 +689,6 @@
 					this.$modal.msgError("密码不相同")
 					return;
 				}
-				console.log(this.user)
 				registUser(this.user).then(res => {
 					this.$modal.msgSuccess("注册成功")
 					this.showType = '2'
@@ -619,14 +696,18 @@
 				})
 			},
 			userLogin(){
-				console.log(this.user)
 				login(this.user.username,this.user.password,'','').then(res => {
 					console.log(res)
 					this.showType = '2'
 					this.hasLogin = '1';
-					this.user = res.user;
-					console.log("this.user",this.user)
+					uni.setStorageSync('user', res.user)
+					this.user = res.user
+					setToken(res.token)
 				})
+			},
+			getUserInfo() {
+				const userInfo = uni.getStorageSync('user');
+				return userInfo
 			},
 			changUseType(e){
 				this.selectUseText = '用途：' + e.detail.data.text;
@@ -639,6 +720,11 @@
 			},
 			changPriceType(e){
 				this.selectPriceText = '价格：'+e.detail.data.text;
+			},
+			goMyCenter () {
+				if(!this.user.nickName) return
+				console.log(this.user, 'user');
+				this.showType = '5'
 			},
 			swichMenu(id) {
 				this.type = id;
@@ -673,6 +759,7 @@
 					});
 				}else{
 					getProductInfoList(data).then(response => {
+						console.log(response, 'res')
 						this.productList = response.data;
 					});
 				}
@@ -1272,5 +1359,41 @@
 		border-radius: 10px;
 		background:$main-action-btn-background-color;
 		color: $buttom-background-color;
+	}
+	
+	.user_info {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  margin: 20px auto; /* 水平居中，并提供上下边距 */
+	  max-width: 400px; /* 最大宽度限制，以便在大屏幕上也有良好的展示 */
+	  padding: 20px;
+	  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 轻微的阴影效果 */
+	  border-radius: 10px; /* 圆角边框 */
+	  background-color: #ffffff; /* 白色背景 */
+	}
+	
+	.user_info image {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		margin-bottom: 15px;
+	}
+	
+	.user_info text {
+	  font-size: 14px;
+	  line-height: 1.5; /* 增加行高，提高可读性 */
+	  margin: 5px 0;
+	  color: #333;
+	}
+	
+	.user_info text:nth-child(2), text:nth-child(3) {
+	  font-size: 16px;
+	  color: #0056b3; /* 更鲜艳的颜色，用于强调 */
+	  margin-bottom: 10px; /* 增加与下方内容的间距 */
+	}
+	
+	.user_info text:not(:last-child) {
+	  margin-bottom: 8px;
 	}
 </style>

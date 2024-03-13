@@ -1,6 +1,6 @@
 // 应用全局配置
 module.exports = {
-  baseUrl: 'http://127.0.0.1:8080',
+  baseUrl: 'http://localhost:8080',
   // baseUrl: 'https://www.xuxiake666.com',
   uniUrl: 'http://www.xuxiake666.com/#/pages/public',
   miniProgramId: 'gh_5fdfbab62b36',
