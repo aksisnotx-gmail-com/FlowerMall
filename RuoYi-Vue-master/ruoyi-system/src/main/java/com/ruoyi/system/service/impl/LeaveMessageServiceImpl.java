@@ -13,20 +13,11 @@ import java.util.List;
  */
 @Service
 public class LeaveMessageServiceImpl extends ServiceImpl<LeaveMessageMapper, LeaveMessage> {
-
     public boolean saveLeaveMessage(LeaveMessage message) {
         return this.save(message);
     }
 
-    public List<LeaveMessage> getMessage(String userId) {
-        return this.lambdaQuery().eq(LeaveMessage::getUserId, userId).list();
-    }
-
     public Boolean deleteMessage(String messageId) {
         return this.removeById(messageId);
-    }
-
-    public List<LeaveMessage> getAllMessage() {
-        return this.lambdaQuery().list();
     }
 }

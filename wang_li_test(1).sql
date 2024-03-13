@@ -590,7 +590,7 @@ CREATE TABLE `sys_user_role`  (
 
 SET FOREIGN_KEY_CHECKS = 1;
 
-
+# 留言信息
 CREATE  TABLE if not exists `sys_leave_message`  (
     id varchar(255) primary key  comment 'ID',
     message text  comment '留言信息',
@@ -600,3 +600,26 @@ CREATE  TABLE if not exists `sys_leave_message`  (
     create_time  timestamp comment '创建时间',
     update_time  timestamp comment '更新时间'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '留言表' ROW_FORMAT = Dynamic;
+
+#鲜花教程
+use wang_li_test;
+CREATE  TABLE if not exists sys_flowers_tutorial  (
+    id varchar(255) primary key  comment 'ID',
+    `text_desc`  text  comment '教程内容',
+    file_id varchar(255)  comment '文件ID,如果有不为空,如果是多个文件用逗号隔开',
+    user_id varchar(255)  comment '用户ID',
+    create_user varchar(255)  comment '创建用户ID',
+    update_user varchar(255)  comment '更新用户ID',
+    create_time  timestamp comment '创建时间',
+    update_time  timestamp comment '更新时间'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '鲜花教程' ROW_FORMAT = Dynamic;
+
+#文件
+CREATE  TABLE if not exists sys_file  (
+        id varchar(255) primary key  comment 'ID',
+        path varchar(255)  comment '保存地址',
+        create_user varchar(255)  comment '创建用户ID',
+        update_user varchar(255)  comment '更新用户ID',
+        create_time  timestamp comment '创建时间',
+        update_time  timestamp comment '更新时间'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件地址' ROW_FORMAT = Dynamic;

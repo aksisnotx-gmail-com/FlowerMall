@@ -25,6 +25,7 @@
         <pagehelper.boot.version>1.4.6</pagehelper.boot.version>
         <fastjson.version>2.0.23</fastjson.version>
         <oshi.version>6.4.0</oshi.version>
+        <cn.hutool.version>5.8.20</cn.hutool.version>
         <commons.io.version>2.11.0</commons.io.version>
         <commons.fileupload.version>1.4</commons.fileupload.version>
         <commons.collections.version>3.2.2</commons.collections.version>
@@ -36,6 +37,12 @@
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
+            <!--   hutool     -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${cn.hutool.version}</version>
+            </dependency>
 
             <!-- SpringBoot的依赖配置-->
             <dependency>
@@ -209,6 +216,13 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!--   hutool     -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${cn.hutool.version}</version>
         </dependency>
     </dependencies>
 
