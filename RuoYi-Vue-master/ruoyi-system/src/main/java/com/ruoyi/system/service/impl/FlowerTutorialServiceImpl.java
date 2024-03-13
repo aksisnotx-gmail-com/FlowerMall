@@ -67,6 +67,17 @@ public class FlowerTutorialServiceImpl extends ServiceImpl<FlowerTutorialMapper,
         return this.removeById(tutorialId) && fileService.removeByIds(stringToList(entity.getFileId()));
     }
 
+    public CommonPageRequestUtils.PageVO<FlowerTutorial> pageOwner(String strUserId) {
+        LambdaQueryWrapper<FlowerTutorial> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(FlowerTutorial::getUserId, strUserId);
+        //转换
+        return getPage(wrapper);
+    }
+
+    public CommonPageRequestUtils.PageVO<FlowerTutorial> pageAll() {
+        return getPage(null);
+    }
+
 
     private String listToString(List<String> list){
         if(Objects.isNull(list) || list.isEmpty()){
@@ -88,18 +99,6 @@ public class FlowerTutorialServiceImpl extends ServiceImpl<FlowerTutorialMapper,
             return new ArrayList<>();
         }
         return Arrays.stream(str.split(StrUtil.COMMA)).collect(Collectors.toList());
-    }
-
-
-    public CommonPageRequestUtils.PageVO<FlowerTutorial> pageOwner(String strUserId) {
-        LambdaQueryWrapper<FlowerTutorial> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(FlowerTutorial::getUserId, strUserId);
-        //转化
-        return getPage(wrapper);
-    }
-
-    public CommonPageRequestUtils.PageVO<FlowerTutorial> pageAll() {
-        return getPage(null);
     }
 
     private CommonPageRequestUtils.PageVO<FlowerTutorial> getPage(LambdaQueryWrapper<FlowerTutorial> wrapper) {
