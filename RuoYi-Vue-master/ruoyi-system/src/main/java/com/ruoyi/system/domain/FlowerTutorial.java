@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 留言表
@@ -40,6 +41,12 @@ public class FlowerTutorial extends Entity implements Serializable {
      * 用户ID
      */
     private String userId;
+
+    /**
+     * 鲜花教程可能有个多个文件
+     */
+    @TableField(exist = false)
+    private List<File> file;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

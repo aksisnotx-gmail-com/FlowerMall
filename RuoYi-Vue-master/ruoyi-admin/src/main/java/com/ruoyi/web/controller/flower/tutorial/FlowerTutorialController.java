@@ -63,15 +63,13 @@ public class FlowerTutorialController {
     @GetMapping("/get")
     @ApiOperation("分页获取个人教程")
     public R<Page<FlowerTutorial>> get() {
-        LambdaQueryWrapper<FlowerTutorial> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(FlowerTutorial::getUserId, SecurityUtils.getLoginUser().getUser().getStrUserId());
-        return R.ok(this.flowerTutorialService.page(CommonPageRequestUtils.defaultPage(),wrapper));
+        return R.ok(this.flowerTutorialService.pageOwner(SecurityUtils.getLoginUser().getUser().getStrUserId()));
     }
 
     @GetMapping("/getAll")
     @ApiOperation("分页获取所有教程")
     @PreAuthorize("@ss.hasRole('admin')")
     public R<Page<FlowerTutorial>> getAll() {
-        return R.ok(this.flowerTutorialService.page(CommonPageRequestUtils.defaultPage()));
+        return R.ok(this.flowerTutorialService.pageAll(CommonPageRequestUtils.defaultPage()));
     }
 }

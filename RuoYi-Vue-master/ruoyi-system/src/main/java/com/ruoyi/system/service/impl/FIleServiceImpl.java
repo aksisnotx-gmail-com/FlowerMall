@@ -64,9 +64,9 @@ public class FIleServiceImpl extends ServiceImpl<FileMapper, File> {
 
     public void dowload(String id)  {
         File fileEntity = this.getById(id);
-        Assert.notNull(fileEntity,()->new GlobalException("文件不存在"));
+        Assert.notNull(fileEntity,() -> new GlobalException("文件不存在"));
         FileUtils.webDownload(fileEntity.getPath(),response,FileUtils.getFileName(fileEntity.getPath()));
     }
-
-
 }
+
+

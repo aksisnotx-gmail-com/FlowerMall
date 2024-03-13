@@ -32,5 +32,8 @@ public class File extends Entity implements Serializable {
     private String path;
 
     @TableField(exist = false)
+    private String suffix;
+
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

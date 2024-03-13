@@ -34,7 +34,7 @@ public class FileController {
 
     @GetMapping("download/{fileId}")
     @ApiOperation("下载文件")
-    public  R<File> download(@PathVariable("fileId") String fileId) {
-        return R.ok(fileService.getById(fileId));
+    public  void download(@PathVariable("fileId") String fileId) {
+        fileService.dowload(fileId);
     }
 }

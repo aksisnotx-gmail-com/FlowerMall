@@ -94,6 +94,19 @@ public class FileUtils {
             throw new GlobalException("web下载失败");
         }
     }
+    public static void webTransport(String filePath, HttpServletResponse response, String fileName) throws GlobalException {
+        try {
+            byte[] download = download(filePath);
+            response.addHeader("Content-Length", "" + download.length);
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+            response.setContentType("application/octet-stream;charset=UTF-8");
+            IoUtil.write(response.getOutputStream(), true, download);
+        } catch (GlobalException | IOException e) {
+            log.error("FileUtils.webDownload下载失败", e);
+            throw new GlobalException("web下载失败");
+        }
+    }
 
 
     /**
