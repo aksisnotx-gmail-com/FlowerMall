@@ -30,13 +30,13 @@ public class OrderController {
 
     private final OrderServiceImpl orderService;
     @PostMapping("/pay")
-    @ApiOperation("付钱")
-    public R<Boolean> pay(@RequestBody @JsonView(Entity.INSERT.class) @Validated(Entity.INSERT.class) OrderParam order) {
+    @ApiOperation("下单")
+    public R<Boolean> placeAnOrder(@RequestBody @JsonView(Entity.INSERT.class) @Validated(Entity.INSERT.class) OrderParam order) {
         return R.ok(orderService.pay(order, SecurityUtils.getLoginUser().getUser().getStrUserId()));
     }
 
     @PostMapping("/continue/pay")
-    @ApiOperation("继续付款")
+    @ApiOperation("付款")
     public R<Boolean> continuePay(@RequestBody @JsonView(Entity.UPDATE.class) @Validated(Entity.UPDATE.class) OrderParam order) {
         return R.ok(orderService.continuePay(order, SecurityUtils.getLoginUser().getUser().getStrUserId()));
     }

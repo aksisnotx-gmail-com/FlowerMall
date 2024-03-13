@@ -30,8 +30,8 @@ public class OrderParam implements Serializable {
     /**
      * 发货地址
      */
-    @JsonView({Entity.UPDATE.class})
-    @NotBlank(message = "配送地址不能为空",groups = Entity.UPDATE.class)
+    @JsonView({Entity.INSERT.class})
+    @NotBlank(message = "配送地址不能为空",groups = Entity.INSERT.class)
     private String deliveryAddress;
 
     /**
