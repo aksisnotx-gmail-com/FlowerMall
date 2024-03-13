@@ -59,14 +59,14 @@ public class OrderController {
         return R.ok(orderService.getOrderInfo(orderId));
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/admin/getAll")
     @ApiOperation("管理员获取所有订单")
     @PreAuthorize("@ss.hasRole('admin')")
     public R<Page<Order>> getAll() {
         return R.ok(orderService.getAllOrders());
     }
 
-    @GetMapping("/delete/{orderId}")
+    @GetMapping("/admin/delete/{orderId}")
     @ApiOperation("管理员删除订单信息")
     @PreAuthorize("@ss.hasRole('admin')")
     public R<Boolean> adminDeleteOrder(@PathVariable("orderId") String orderId) {
