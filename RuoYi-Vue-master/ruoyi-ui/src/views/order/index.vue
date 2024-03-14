@@ -1,5 +1,5 @@
 <script>
-import { listInfo, getInfo, delInfo, addInfo, updateInfo } from "@/api/system/product";
+import { listOrder, delOrder } from "@/api/order/index";
 
 export default {
   name: "Info",
@@ -28,17 +28,9 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        name: null,
-        material: null,
-        packageInfo: null,
-        flowerLanguage: null,
-        bundled: null,
-        delivery: null,
-        description: null,
-        productNum: null,
-        tagUrl: null,
-        url: null,
-        status: null,
+        material: '',
+        createUser: '',
+        orderState: ''
       },
       // 表单参数
       form: {},
@@ -54,9 +46,10 @@ export default {
     /** 查询商品信息0列表 */
     getList() {
       this.loading = true;
-      listInfo(this.queryParams).then(response => {
-        this.infoList = response.rows;
-        this.total = response.total;
+      listOrder().then(response => {
+        this.infoList = this.flattenOrdersWithProducts(response.data.records);
+        console.log(this.infoList, 'list');
+        this.total = response.data.total;
         this.loading = false;
       });
     },
@@ -69,34 +62,25 @@ export default {
     reset() {
       this.form = {
         id: null,
-        name: null,
-        material: null,
-        packageInfo: null,
-        flowerLanguage: null,
-        bundled: null,
-        delivery: null,
-        description: null,
-        productNum: null,
-        tagUrl: null,
-        url: null,
-        status: null,
-        type: null,
-        createBy: null,
-        createTime: null,
-        updateBy: null,
-        updateTime: null
       };
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+    handleQueryByMate () {
+      const val = this.queryParams.material.trim();
+      this.infoList = this.infoList.filter(item => item.material.includes(val));
+    },
+    handleQueryByUser () {
+      const val = this.queryParams.createUser.trim();
+      this.infoList = this.infoList.filter(item => item.createUser.includes(val));
+    },
+    handleQueryByState(val) {
+      console.log(val, 'val');
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
-      this.handleQuery();
+      this.getList()
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -142,9 +126,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除商品信息0编号为"' + ids + '"的数据项？').then(function() {
-        return delInfo(ids);
+      const { id } = row.orderInfo
+      this.$modal.confirm('是否确认删除商品名称为"' + row.material + '"的数据项？').then(function() {
+        return delOrder(id);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -155,7 +139,44 @@ export default {
       this.download('system/info/export', {
         ...this.queryParams
       }, `info_${new Date().getTime()}.xlsx`)
-    }
+    },
+    flattenOrdersWithProducts(orders) {
+      // 创建一个新数组来存放扩展后的商品信息
+      const flattenedProducts = [];
+
+      orders.forEach(order => {
+        // 遍历每个订单中的商品
+        order.products.forEach(product => {
+          // 为每个商品创建一个新的对象，包含商品信息和它所属的订单信息
+          const productWithOrderInfo = {
+            ...product, // 复制原商品信息
+            orderInfo: { // 添加一个新的属性来存放订单信息
+              id: order.id,
+              createUser: order.createUser,
+              userId: order.userId,
+              deliveryAddress: order.deliveryAddress,
+              orderState: order.orderState,
+              createTime: order.createTime,
+              lumpSum: order.lumpSum
+            }
+          };
+          // 将扩展后的商品对象添加到结果数组中
+          flattenedProducts.push(productWithOrderInfo);
+        });
+      });
+
+      return flattenedProducts;
+    },
+    mapState (state) {
+      const obj = {
+        WAITING: '代付款',
+        PAID: '已付款',
+        CANCELLED: '已取消'
+      }
+      
+      if(!obj[state]) return ''
+      return obj[state]
+    },
   }
 };
 </script> 
@@ -163,84 +184,40 @@ export default {
   <template>
     <div class="app-container">
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-        <el-form-item label="商品名称" prop="name">
-          <el-input
-            v-model="queryParams.name"
-            placeholder="请输入商品名称"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="材料" prop="material">
+        <el-form-item label="商品名称" prop="material">
           <el-input
             v-model="queryParams.material"
-            placeholder="请输入材料"
+            placeholder="请输入商品名称"
             clearable
-            @keyup.enter.native="handleQuery"
+            @keyup.enter.native="handleQueryByMate"
           />
         </el-form-item>
-        <el-form-item label="包装" prop="packageInfo">
+        <el-form-item label="用户名" prop="createUser">
           <el-input
-            v-model="queryParams.packageInfo"
-            placeholder="请输入包装"
+            v-model="queryParams.createUser"
+            placeholder="请输入用户名"
             clearable
-            @keyup.enter.native="handleQuery"
+            @keyup.enter.native="handleQueryByUser"
           />
         </el-form-item>
-        <el-form-item label="花语" prop="flowerLanguage">
-          <el-input
-            v-model="queryParams.flowerLanguage"
-            placeholder="请输入花语"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="附赠" prop="bundled">
-          <el-input
-            v-model="queryParams.bundled"
-            placeholder="请输入附赠"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="配送" prop="delivery">
-          <el-input
-            v-model="queryParams.delivery"
-            placeholder="请输入配送"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="说明" prop="description">
-          <el-input
-            v-model="queryParams.description"
-            placeholder="请输入说明"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="数量" prop="productNum">
-          <el-input
-            v-model="queryParams.productNum"
-            placeholder="请输入数量"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="头像" prop="tagUrl">
-          <el-input
-            v-model="queryParams.tagUrl"
-            placeholder="请输入头像"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
+        <el-form-item label="订单状态" prop="orderState">
+          <el-select v-model="queryParams.orderState" placeholder="请选择">
+            <el-option
+              v-for="item of [{value: 'WAITING', label: '待付款'}, { value: 'PAID', label: '已付款' }, {value: 'CANCELLED', label: '已取消'}]"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              @change="handleQueryByState"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+          <!-- <el-button type="primary" icon="el-icon-search" size="mini">搜索</el-button> -->
           <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         </el-form-item>
       </el-form>
-  
+<!--   
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
           <el-button
@@ -285,21 +262,29 @@ export default {
           >导出</el-button>
         </el-col>
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-      </el-row>
+      </el-row> -->
   
       <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="商品名称" align="center" prop="name" />
-        <el-table-column label="材料" align="center" prop="material" />
-        <el-table-column label="花语" align="center" prop="flowerLanguage" />
-        <el-table-column label="价格" align="center" prop="price" />
-        <el-table-column label="数量" align="center" prop="productNum" />
-        <el-table-column label="状态" align="center" prop="status" >
+        <el-table-column type="index" width="55" align="center" />
+        <el-table-column label="商品图片" align="center" prop="url">
           <template slot-scope="scope">
-            {{scope.row.status == '0'?"未审核":scope.row.status == '1'?"审核通过":scope.row.status == '2'?"已上架":"已下架"}}
+            <img :src="scope.row.url.replace(';', '')" style="width: 100px; object-fit: fill;" />
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <el-table-column label="商品名称" align="center" prop="material" />
+        <el-table-column label="商品价格" align="center">
+          <template slot-scope="scope">
+            <span>{{ Number(scope.row.price) * Number(scope.row.productNum) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户名称" align="center" prop="orderInfo.createUser" />
+        <el-table-column label="地址" align="center" prop="orderInfo.deliveryAddress" />
+        <el-table-column label="状态" align="center" prop="orderInfo.orderState" >
+          <template slot-scope="scope">
+            <span>{{ mapState(scope.row.orderInfo.orderState) }}</span>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -316,7 +301,7 @@ export default {
               v-hasPermi="['system:info:remove']"
             >删除</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
   
       <pagination
@@ -421,3 +406,4 @@ export default {
       </el-dialog>
     </div>
   </template>
+

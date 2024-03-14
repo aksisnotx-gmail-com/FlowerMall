@@ -1,9 +1,24 @@
 
 <script>
+	import { getTutorialListApi } from '@/api/tutorial/index.js'
 	export default {
 		data() {
 			return {
-				content: '《叶圣陶散文》为“名家经典珍藏”丛书之一，收录了叶圣陶先生的散文精品数十篇。这些作品内容丰富，题材各异，构思精巧，文笔精巧、语言幽默、内蕴深厚、风格恬淡，充分显示了叶圣陶先生的文学功底及丰富的人生阅历，从一个侧面反映了作者的思想感情及创作风格，非常值得一读。叶圣陶是20世纪中国一位杰出的作家、教育家和出版家，又是中国现代儿童文学创作的先行者。作为散文家，他早期和周作人、朱自清共同成为文学研究会散文创作的中坚，后来又成为开明派散文的代表，其散文被一九三五年出版的《中国新文学大系》选录的篇数仅次于周作人、鲁迅和朱自清。'
+				content: '《叶圣陶散文》为“名家经典珍藏”丛书之一，收录了叶圣陶先生的散文精品数十篇。这些作品内容丰富，题材各异，构思精巧，文笔精巧、语言幽默、内蕴深厚、风格恬淡，充分显示了叶圣陶先生的文学功底及丰富的人生阅历，从一个侧面反映了作者的思想感情及创作风格，非常值得一读。叶圣陶是20世纪中国一位杰出的作家、教育家和出版家，又是中国现代儿童文学创作的先行者。作为散文家，他早期和周作人、朱自清共同成为文学研究会散文创作的中坚，后来又成为开明派散文的代表，其散文被一九三五年出版的《中国新文学大系》选录的篇数仅次于周作人、鲁迅和朱自清。',
+				tutorialList: []
+				
+			}
+		},
+		created() {
+			this.getTutorialList()
+		},
+		methods: {
+			async getTutorialList () {
+				const res = await getTutorialListApi()
+				const { code, data } = res
+				if(code === 200) {
+					this.tutorialList = [ ...data.records ]
+				}
 			}
 		}
 	}
@@ -11,39 +26,11 @@
 
 <template>
 	<view class="tutorial">
-		<view class="card">
-		  <video src="@/static/videos/demo.mp4" controls></video>
+		<view class="card" v-for="item of tutorialList" :key="item.id">
+		  <video :src="item.file.path" controls></video>
 		  <p>
-			 fuck
+			 {{item.textDesc}}
 		  </p>
-		</view>
-		<view class="card">
-		  <video src="@/static/videos/demo.mp4" controls></video>
-		  <p>
-			 fuck
-		  </p>
-		</view>
-		<view class="card">
-		  <video src="@/static/videos/demo.mp4" controls></video>
-		  <p>
-			 fuck
-		  </p>
-		</view>
-		<view class="card">
-		  <video src="@/static/videos/demo.mp4" controls></video>
-		  <p>
-			 fuck
-		  </p>
-		</view>
-		<view class="card">
-		  <video src="@/static/videos/demo.mp4" controls></video>
-		  <p>
-			 fuck
-		  </p>
-		</view>
-		<view class="card">
-		  <video src="@/static/videos/demo.mp4" controls></video>
-		  <p>{{content}}</p>
 		</view>
 	</view>
 </template>

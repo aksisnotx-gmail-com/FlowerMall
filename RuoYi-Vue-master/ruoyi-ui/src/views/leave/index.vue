@@ -1,5 +1,5 @@
 <script>
-import { listmsg } from "@/api/leave/index";
+import { listmsg, delMsg } from "@/api/leave/index";
 
 export default {
   name: "Info",
@@ -28,17 +28,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        name: null,
-        material: null,
-        packageInfo: null,
-        flowerLanguage: null,
-        bundled: null,
-        delivery: null,
-        description: null,
-        productNum: null,
-        tagUrl: null,
-        url: null,
-        status: null,
+        createUser: '',
       },
       // 表单参数
       form: {},
@@ -55,10 +45,9 @@ export default {
     getList() {
       this.loading = true;
       listmsg().then(response => {
-        console.log(response,  'ressz=');
-        // this.infoList = response.rows;
-        // this.total = response.total;
-        // this.loading = false;
+        this.infoList = response.data.records;
+        this.total = response.data.total;
+        this.loading = false;
       });
     },
     // 取消按钮
@@ -91,13 +80,13 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      const val = this.queryParams.createUser.trim();
+      this.infoList = this.infoList.filter(item => item.createUser.includes(val));
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
-      this.handleQuery();
+      this.getList();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -114,7 +103,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const id = row.id || this.ids
+      const id = row.id
       getInfo(id).then(response => {
         this.form = response.data;
         this.open = true;
@@ -143,9 +132,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除商品信息0编号为"' + ids + '"的数据项？').then(function() {
-        return delInfo(ids);
+      const ids = row.id
+      this.$modal.confirm('是否确认删除用户名"' + row.createUser + '"的数据项？').then(function() {
+        return delMsg(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -164,10 +153,10 @@ export default {
   <template>
     <div class="app-container">
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-        <el-form-item label="商品名称" prop="name">
+        <el-form-item label="用户名称" prop="createUser">
           <el-input
-            v-model="queryParams.name"
-            placeholder="请输入商品名称"
+            v-model="queryParams.createUser"
+            placeholder="请输入用户名称"
             clearable
             @keyup.enter.native="handleQuery"
           />
@@ -178,7 +167,7 @@ export default {
         </el-form-item>
       </el-form>
   
-      <el-row :gutter="10" class="mb8">
+      <!-- <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
           <el-button
             type="primary"
@@ -222,29 +211,22 @@ export default {
           >导出</el-button>
         </el-col>
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-      </el-row>
+      </el-row> -->
   
-      <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="商品名称" align="center" prop="name" />
-        <el-table-column label="材料" align="center" prop="material" />
-        <el-table-column label="花语" align="center" prop="flowerLanguage" />
-        <el-table-column label="价格" align="center" prop="price" />
-        <el-table-column label="数量" align="center" prop="productNum" />
-        <el-table-column label="状态" align="center" prop="status" >
-          <template slot-scope="scope">
-            {{scope.row.status == '0'?"未审核":scope.row.status == '1'?"审核通过":scope.row.status == '2'?"已上架":"已下架"}}
-          </template>
-        </el-table-column>
+      <el-table v-loading="loading" :data="infoList">
+        <el-table-column type="index" width="55" align="center" />
+        <el-table-column label="留言用户名" align="center" prop="createUser" />
+        <el-table-column label="留言时间" align="center" prop="createTime" />
+        <el-table-column label="留言内容" align="center" prop="message" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button
+            <!-- <el-button
               size="mini"
               type="text"
               icon="el-icon-edit"
               @click="handleUpdate(scope.row)"
               v-hasPermi="['system:info:edit']"
-            >修改</el-button>
+            >修改</el-button> -->
             <el-button
               size="mini"
               type="text"

@@ -124,10 +124,14 @@
 					<view class="c-row">
 						<text>总价：￥{{totalPrice}}</text>
 					</view>
+					<view class="c-row">
+						收货地址: 
+						<input type="text" v-model="deliveryAddress" id="deliveryAddress" />
+					</view>
 						<!-- <image src="../../static/temp/erweima.png"></image> -->
 					<view class="c-row">
-						<button type="primary" class=" action-btn no-border" @click="cancel">返回</button>
-						<button type="warn" class=" action-btn no-border" @click="">确认支付</button>
+						<button type="primary" class=" action-btn no-border" @click="cancelPay">返回</button>
+						<button type="warn" class=" action-btn no-border" @click="confirmPay">确认支付</button>
 					</view>
 				</view>
 			</view>
@@ -371,7 +375,7 @@
 	import tutorial from '@/pages/tutorial/index.vue'
 	import { setToken } from '@/utils/auth.js'
 	
-	import {getProductInfoList,getProductList,getProductType} from "@/api/index/index.js"
+	import {getProductInfoList,getProductList,getProductType, addOrderApi} from "@/api/index/index.js"
 	
 	import config from '@/config'
 	const goodListKey = config.goodListKey
@@ -395,6 +399,7 @@
 					password:"",
 					password1:""
 				},
+				deliveryAddress: '',
 				titleNViewBackground: '',
 				swiperCurrent: 0,
 				swiperLength: 0,
@@ -616,7 +621,52 @@
 				for(let item of this.goodListTmp){
 					this.totalPrice = item.price * item.number + this.totalPrice;
 				}
-
+				console.log(this.goodList, 'goods');
+			},
+			cancelPay () {
+				this.showType = '4';
+				this.user = {
+					username:"",
+					nickname:"",
+					email:"",
+					phonenumber:"",
+					sex:"",
+					password:"",
+					password1:"",
+				};
+				console.log(this.user)
+			},
+			confirmPay () {
+				if(!this.deliveryAddress.trim()) {
+					uni.showToast({
+						title: '请填写地址',
+						icon: 'error',
+						duration: 3000
+					})
+					return
+				}
+				
+				const productId = []
+				this.goodListTmp.forEach(item => {
+					productId.push(item.id)
+				})
+				
+				const objPar = {
+					deliveryAddress: this.deliveryAddress,
+					lumpSum: this.totalPrice,
+					productId
+				}
+				addOrderApi(objPar).then(res => {
+					const { code, data } = res
+					if(code === 200) {
+						uni.showToast({
+							title: '支付成功',
+							icon: 'success',
+							duration:3000
+						})
+					}
+				})
+				
 			},
 			removeGood(item){
 				let that = this;

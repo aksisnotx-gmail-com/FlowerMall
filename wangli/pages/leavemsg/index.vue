@@ -65,7 +65,7 @@
 				const res = await getLeaveListApi()
 				const { code, data } = res
 				if(code === 200) {
-					this.msgList = [ ...data ]
+					this.msgList = [ ...data.records ]
 				}
 			}
 		},

@@ -29,3 +29,11 @@ export function getProductType(id) {
     'method': 'get'
   })
 }
+
+export function addOrderApi(data) {
+  return request({
+    'url': '/order/pay',
+    'method': 'post',
+	data
+  })
+}

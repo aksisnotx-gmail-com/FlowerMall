@@ -1,16 +1,16 @@
 import request from '@/utils/request'
 
 // 查询商品信息0列表
-export function listmsg() {
+export function listOrder() {
     return request({
-      url: '/leave/message/getAllMessage',
+      url: '/order/admin/getAll',
       method: 'get',
     })
 }
 
-export function delMsg (messageId) {
+export function delOrder (orderId) {
   return request({
-    url: `/leave/message/delete/${messageId}`,
+    url: `/order/admin/delete/${orderId}`,
     method: 'get'
   })
 }
